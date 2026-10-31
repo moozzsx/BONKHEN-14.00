@@ -12,11 +12,11 @@
 </head>
 <body><main class="wrap">
 <header><div class="tag">PROJET COMMUNAUTAIRE</div><h1>BONKHEN <span style="color:#a99cff">14.00</span></h1><p>Interface navigateur autonome · diagnostic et vérification locale</p></header>
-<section class="panel"><div class="status"><span class="dot"></span><div><strong>Injection non disponible sur cette version</strong><span class="muted">La page fonctionne dans le navigateur, mais aucune chaîne d’exploitation complète et vérifiée pour le firmware 14.00 n’est intégrée.</span></div></div><button class="disabled" disabled title="Désactivé tant qu'une chaîne complète n'est pas validée">INJECTER HEN — NON DISPONIBLE</button></section>
+<section class="panel"><div class="status"><span class="dot"></span><div><strong>Injection non disponible sur cette version</strong><span class="muted">La page fonctionne dans le navigateur, mais aucune chaîne d’exploitation complète et vérifiée pour le firmware 14.00 n’est intégrée.</span></div></div><button id="injectTest" class="disabled" type="button">TESTER LE BOUTON — MODE SÛR</button><p id="injectStatus" class="muted" aria-live="polite">Mode test : aucun exploit ni payload ne sera lancé.</p></section>
 <section class="panel"><h2>1. Vérifier le fichier HEN</h2><p class="muted">Sélectionne ton fichier local hen.bin. Il reste sur ton appareil : cette page ne l’envoie à aucun serveur et ne l’exécute pas.</p><input id="file" type="file" accept=".bin,application/octet-stream"><label class="filelabel" for="file">Choisir hen.bin</label><div id="fileInfo" class="muted" style="margin-top:14px">Aucun fichier sélectionné.</div><div class="grid" style="margin-top:14px"><div class="metric"><small>SHA-256 calculé</small><b id="hash">—</b></div><div class="metric"><small>Comparaison</small><b id="match">En attente</b></div></div></section>
 <section class="panel"><h2>2. Diagnostic navigateur</h2><div class="grid"><div class="metric"><small>Contexte sécurisé</small><b id="secure">—</b></div><div class="metric"><small>Web Crypto</small><b id="crypto">—</b></div><div class="metric"><small>Navigateur</small><b id="ua">—</b></div><div class="metric"><small>Firmware console</small><b>Non détectable depuis une page web</b></div></div><div class="actions"><button id="diag" class="secondary">Actualiser le diagnostic</button></div></section>
 <section class="panel"><h2>Pourquoi le bouton reste désactivé ?</h2><div class="notice">Un contrôle SHA-256 valide seulement l’intégrité du fichier. Il ne prouve ni la compatibilité avec le firmware 14.00, ni l’existence d’un exploit WebKit, d’une primitive kernel ou d’un transport natif permettant l’injection.</div><p class="muted">Cette interface n’exécute aucun payload, ne lance aucune commande système et ne contacte aucun hôte distant. Le bouton ne pourra être activé qu’après intégration et validation indépendante de tous les composants nécessaires.</p></section>
-<footer>BONKHEN-14.00 · v1.0 · outil de diagnostic local</footer>
+<footer>BONKHEN-14.00 · v1.0.1 · diagnostic et test d’interface</footer>
 </main>
 <script>
 'use strict';
@@ -28,6 +28,7 @@ function diagnostic(){
  $('ua').textContent=navigator.userAgent;
 }
 $('diag').addEventListener('click',diagnostic);
+$('injectTest').addEventListener('click',()=>{ $('injectStatus').textContent='Test réussi : le bouton répond. Injection HEN non exécutée — aucun exploit WebKit/kernel 14.00 vérifié n’est intégré.'; $('injectStatus').className='bad'; });
 $('file').addEventListener('change',async e=>{
  const f=e.target.files&&e.target.files[0];$('hash').textContent='—';$('match').textContent='Calcul…';
  if(!f){$('fileInfo').textContent='Aucun fichier sélectionné.';$('match').textContent='En attente';return}
